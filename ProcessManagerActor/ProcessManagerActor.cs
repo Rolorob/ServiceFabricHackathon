@@ -1,16 +1,16 @@
-﻿using Microsoft.ServiceFabric.Actors;
+﻿using Common.Events;
+using Common.Model;
+using DiffCalculatorActor.Interfaces;
+using Microsoft.ServiceFabric.Actors;
+using Microsoft.ServiceFabric.Actors.Client;
 using Microsoft.ServiceFabric.Actors.Runtime;
 using ProcessManagerActor.Interfaces;
-using Common.Events;
+using ProcessManagerActor.Interfaces.Events;
+using ReadingSplitterActor.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Collections;
-using System.Collections.Generic;
-using Microsoft.ServiceFabric.Actors.Client;
-using DiffCalculatorActor.Interfaces;
-using Common.Model;
-using ProcessManagerActor.Interfaces.Events;
 
 namespace ProcessManagerActor
 {
@@ -59,7 +59,7 @@ namespace ProcessManagerActor
         {
             if (reminderName.StartsWith(StartProcessingReminder))
             {
-                // Get next DeviceReadEvent 
+                // Get next DeviceReadEvent
                 var deviceReadQueue = await this.StateManager.GetStateAsync<List<DeviceRead>>(DEVICE_READS_QUEUE);
                 var deviceReadEvent = deviceReadQueue.First();
                 var actorId = this.GetActorId();
@@ -68,20 +68,29 @@ namespace ProcessManagerActor
                 var diffActor = ActorProxy.Create<IDiffCalculatorActor>(actorId, "ServiceFabricHackathon", "DiffCalculatorActorService");
                 var diffResult = await diffActor.CalculateDiffAsync(deviceReadEvent.Reading);
 
-                // TODO: Then we split
-
-                // Then we publish an event
-                var result = new ReadingResult()
+                if (diffResult != null)
                 {
-                    ChannelId = deviceReadEvent.Reading.ChannelId.ToString(),
-                    DeviceId = deviceReadEvent.DeviceId,
-                    Timestamp = deviceReadEvent.Reading.Timestamp,
-                    Value = diffResult.DiffValue,
-                };
+                    // Then we split
+                    var splitActor = ActorProxy.Create<IReadingSplitterActor>(actorId, "ServiceFabricHackathon", "ReadingSplitterActorService");
+                    var splitResult = await splitActor.SplitAsync(diffResult);
 
-                var evt = GetEvent<IDeviceReadingProcessedEvent>();
-                evt.DeviceReadingProcessed(result);
-                
+                    var evt = GetEvent<IDeviceReadingProcessedEvent>();
+
+                    foreach (var splitResultItem in splitResult)
+                    {
+                        var readingResult = new ReadingResult()
+                        {
+                            ChannelId = deviceReadEvent.Reading.ChannelId.ToString(),
+                            DeviceId = deviceReadEvent.DeviceId,
+                            Timestamp = splitResultItem.Minute,
+                            Value = splitResultItem.Reading
+                        };
+
+                        // Then we publish an event
+                        evt.DeviceReadingProcessed(readingResult);
+                    }
+                }
+
                 // Remove processed DeviceReadEvent from queue
                 deviceReadQueue.RemoveAt(0);
                 await this.StateManager.SetStateAsync(DEVICE_READS_QUEUE, deviceReadQueue);
