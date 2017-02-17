@@ -7,6 +7,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
+using Microsoft.ServiceFabric.Actors.Client;
+using DiffCalculatorActor.Interfaces;
+using Common.Model;
 
 namespace ProcessManagerActor
 {
@@ -58,8 +61,27 @@ namespace ProcessManagerActor
                 // Get next DeviceReadEvent 
                 var deviceReadQueue = await this.StateManager.GetStateAsync<List<DeviceRead>>(DEVICE_READS_QUEUE);
                 var deviceReadEvent = deviceReadQueue.First();
+                var actorId = this.GetActorId();
 
                 //TODO: Start processing the DeviceReadEvent
+                
+                // First we diff
+                var diffActor = ActorProxy.Create<IDiffCalculatorActor>(actorId, "ServiceFabricHackathon", "DiffCalculatorActorService");
+                var diffResult = await diffActor.CalculateDiffAsync(deviceReadEvent.Reading);
+
+                // Then we split
+
+
+                // then we publish an event
+                var result = new ReadingResult()
+                {
+                    ChannelId = deviceReadEvent.Reading.ChannelId.ToString(),
+                    DeviceId = deviceReadEvent.DeviceId,
+                    Timestamp = DateTime.UtcNow,
+                    Value = 1m
+                };
+
+
 
                 // Remove processed DeviceReadEvent from queue
                 deviceReadQueue.RemoveAt(0);

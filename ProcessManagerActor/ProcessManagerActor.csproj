@@ -100,6 +100,10 @@
       <Project>{e9b1f059-287a-491e-b518-cc553168c783}</Project>
       <Name>Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DiffCalculatorActor.Interfaces\DiffCalculatorActor.Interfaces.csproj">
+      <Project>{593e1c37-95a8-417b-8ca1-00cc0867ffaa}</Project>
+      <Name>DiffCalculatorActor.Interfaces</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ProcessManagerActor.Interfaces\ProcessManagerActor.Interfaces.csproj">
       <Project>{34462524-6AD0-4DFD-B0CB-CB1C06B10045}</Project>
       <Name>ProcessManagerActor.Interfaces</Name>
