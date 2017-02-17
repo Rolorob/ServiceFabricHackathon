@@ -7,11 +7,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
+using ProcessManagerActor.Interfaces.Events;
+using Common.Model;
 
 namespace ProcessManagerActor
 {
     [StatePersistence(StatePersistence.Persisted)]
-    internal class ProcessManagerActor : Actor, IProcessManagerActor, IRemindable
+    internal class ProcessManagerActor : Actor, IProcessManagerActor, IRemindable, IActorEventPublisher<IDeviceReadingProcessedEvent>
     {
         private const string StartProcessingReminder = "StartProcessingReminder";
         private const string DEVICE_READS_QUEUE = "DeviceReadsQueue";
@@ -64,6 +66,9 @@ namespace ProcessManagerActor
                 // Remove processed DeviceReadEvent from queue
                 deviceReadQueue.RemoveAt(0);
                 await this.StateManager.SetStateAsync(DEVICE_READS_QUEUE, deviceReadQueue);
+
+                var ev = GetEvent<IDeviceReadingProcessedEvent>();
+                ev.DeviceReadingProcessed(new ReadingResult());
             }
         }
     }
