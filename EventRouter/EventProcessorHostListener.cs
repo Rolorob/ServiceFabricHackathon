@@ -54,7 +54,7 @@ namespace EventRouter
 
                 return "fdr-event-hub";
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
                 throw;

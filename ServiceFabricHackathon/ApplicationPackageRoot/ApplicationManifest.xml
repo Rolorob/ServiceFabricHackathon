@@ -6,10 +6,22 @@
     <Parameter Name="ProcessManagerActorService_PartitionCount" DefaultValue="10" />
     <Parameter Name="ProcessManagerActorService_MinReplicaSetSize" DefaultValue="3" />
     <Parameter Name="ProcessManagerActorService_TargetReplicaSetSize" DefaultValue="3" />
+    <Parameter Name="DiffCalculatorActorService_PartitionCount" DefaultValue="10" />
+    <Parameter Name="DiffCalculatorActorService_MinReplicaSetSize" DefaultValue="3" />
+    <Parameter Name="DiffCalculatorActorService_TargetReplicaSetSize" DefaultValue="3" />
+    <Parameter Name="ReadingSplitterActorService_PartitionCount" DefaultValue="10" />
+    <Parameter Name="ReadingSplitterActorService_MinReplicaSetSize" DefaultValue="3" />
+    <Parameter Name="ReadingSplitterActorService_TargetReplicaSetSize" DefaultValue="3" />
   </Parameters>
   <!-- Import the ServiceManifest from the ServicePackage. The ServiceManifestName and ServiceManifestVersion 
        should match the Name and Version attributes of the ServiceManifest element defined in the 
        ServiceManifest.xml file. -->
+  <ServiceManifestImport>
+    <ServiceManifestRef ServiceManifestName="ReadingSplitterActorPkg" ServiceManifestVersion="1.0.0" />
+  </ServiceManifestImport>
+  <ServiceManifestImport>
+    <ServiceManifestRef ServiceManifestName="DiffCalculatorActorPkg" ServiceManifestVersion="1.0.0" />
+  </ServiceManifestImport>
   <ServiceManifestImport>
     <ServiceManifestRef ServiceManifestName="UISocketStatelessServicePkg" ServiceManifestVersion="1.0.0" />
     <ConfigOverrides />
@@ -40,6 +52,16 @@
     <Service Name="ProcessManagerActorService" GeneratedIdRef="76831b98-07b7-40ea-999b-b1ca317d84c9|Persisted">
       <StatefulService ServiceTypeName="ProcessManagerActorServiceType" TargetReplicaSetSize="[ProcessManagerActorService_TargetReplicaSetSize]" MinReplicaSetSize="[ProcessManagerActorService_MinReplicaSetSize]">
         <UniformInt64Partition PartitionCount="[ProcessManagerActorService_PartitionCount]" LowKey="-9223372036854775808" HighKey="9223372036854775807" />
+      </StatefulService>
+    </Service>
+    <Service Name="DiffCalculatorActorService" GeneratedIdRef="55810e96-f28e-4eac-8ae4-e010b91e9a99|Persisted">
+      <StatefulService ServiceTypeName="DiffCalculatorActorServiceType" TargetReplicaSetSize="[DiffCalculatorActorService_TargetReplicaSetSize]" MinReplicaSetSize="[DiffCalculatorActorService_MinReplicaSetSize]">
+        <UniformInt64Partition PartitionCount="[DiffCalculatorActorService_PartitionCount]" LowKey="-9223372036854775808" HighKey="9223372036854775807" />
+      </StatefulService>
+    </Service>
+    <Service Name="ReadingSplitterActorService" GeneratedIdRef="899faa70-9f16-452d-90d1-f8ad1ffe57e0|Persisted">
+      <StatefulService ServiceTypeName="ReadingSplitterActorServiceType" TargetReplicaSetSize="[ReadingSplitterActorService_TargetReplicaSetSize]" MinReplicaSetSize="[ReadingSplitterActorService_MinReplicaSetSize]">
+        <UniformInt64Partition PartitionCount="[ReadingSplitterActorService_PartitionCount]" LowKey="-9223372036854775808" HighKey="9223372036854775807" />
       </StatefulService>
     </Service>
   </DefaultServices>
