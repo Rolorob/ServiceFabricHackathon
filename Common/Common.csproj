@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Events\DeviceEventBase.cs" />
     <Compile Include="Events\DeviceRead.cs" />
+    <Compile Include="Model\AggregatedReading.cs" />
     <Compile Include="Model\DeviceReading.cs" />
     <Compile Include="Model\ReadingResult.cs" />
     <Compile Include="Model\ReadingDiff.cs" />
