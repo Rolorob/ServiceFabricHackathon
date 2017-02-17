@@ -84,7 +84,6 @@
     <Reference Include="System.Runtime.Serialization" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DateTimeUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReadingSplitterActor.cs" />
     <Compile Include="Program.cs" />

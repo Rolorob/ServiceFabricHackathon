@@ -48,11 +48,18 @@ namespace ReadingSplitterActor
 
         public Task<IEnumerable<SplitReading>> SplitAsync(ReadingDiff reading)
         {
-            var startDateWithoutSeconds = reading.StartTime.Truncate(TimeSpan.TicksPerSecond);
-            var endDateWithoutSeconds = reading.EndTime.Truncate(TimeSpan.TicksPerSecond);
+            var splitReadings = new List<SplitReading>();
 
-            //if (startDateWithoutSeconds.Equals(endDateWithoutSeconds))
-            return Task.FromResult(Enumerable.Empty<SplitReading>());
+            var period = reading.EndTime.Subtract(reading.StartTime);
+            var totalMinutes = (int)Math.Ceiling(period.TotalMinutes);
+            var readingPerMinute = reading.DiffValue / totalMinutes;
+
+            for (int minute = 0; minute < totalMinutes; minute++)
+            {
+                splitReadings.Add(new SplitReading(reading.StartTime.AddMinutes(minute), readingPerMinute));
+            }
+
+            return Task.FromResult((IEnumerable<SplitReading>)splitReadings);
         }
     }
 }

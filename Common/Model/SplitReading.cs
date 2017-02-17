@@ -4,11 +4,13 @@ using System.Runtime.Serialization;
 
 namespace Common.Model
 {
+    [DataContract]
     public class SplitReading
     {
         public SplitReading(DateTime minute, decimal reading)
         {
-            Minute = minute;
+            // Dit rond de DateTime af naar hele minuten
+            Minute = minute.AddTicks(-(minute.Ticks % TimeSpan.TicksPerMinute));
             Reading = reading;
         }
 
