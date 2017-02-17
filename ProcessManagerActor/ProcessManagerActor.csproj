@@ -108,6 +108,10 @@
       <Project>{34462524-6AD0-4DFD-B0CB-CB1C06B10045}</Project>
       <Name>ProcessManagerActor.Interfaces</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ReadingSplitterActor.Interfaces\ReadingSplitterActor.Interfaces.csproj">
+      <Project>{86e63932-7908-46ab-a320-89f44c6f234e}</Project>
+      <Name>ReadingSplitterActor.Interfaces</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.ServiceFabric.Actors.2.4.164\build\Microsoft.ServiceFabric.Actors.targets" Condition="Exists('..\packages\Microsoft.ServiceFabric.Actors.2.4.164\build\Microsoft.ServiceFabric.Actors.targets')" />
