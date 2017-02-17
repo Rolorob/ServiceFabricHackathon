@@ -42,18 +42,30 @@ namespace EventRouter
                 .Select(m => ParseDeviceEvent(m))
                 .ToList();
 
-            // TODO: all events will are now processed by the same actor. We want a single actor per device / channel combination.
-            var id = new ActorId(string.Format("{0}_{1}", "deviceId", "channelId"));
-            var processManagerActor = ActorProxy.Create<IProcessManagerActor>(id, "ServiceFabricHackathon", "ProcessManagerActorService");
-
-            var processTasks = deviceReadEvents.Select(dr => processManagerActor.ProcessDeviceReadEventAsync(dr));
+            var processTasks = deviceReadEvents
+                .Select(dr => 
+                    new
+                    {
+                        Actor = ActorProxy.Create<IProcessManagerActor>(CreateActorId(dr), "ServiceFabricHackathon", "ProcessManagerActorService"),
+                        DeviceRead = dr
+                    })
+                .Select(x => x.Actor.ProcessDeviceReadEventAsync(x.DeviceRead));
 
             await Task.WhenAll(processTasks);
 
             // TODO: set checkpoint when message is processed correctly
             // await context.CheckpointAsync();
+        }
 
-            await Task.FromResult(true);
+        private ActorId CreateActorId(DeviceRead dr)
+        {
+            // ChannelId is in format: profile://heating/export/etc im not sure an actor id will accept :// and /, therefore we replace them with an _
+            var flatChannel = dr.Reading.ChannelId
+                .ToString()
+                .Replace("://", "_")
+                .Replace("/", "_");
+
+            return new ActorId($"{dr.DeviceId}_{flatChannel}");
         }
 
         private bool IsDeviceRead(EventData message)
