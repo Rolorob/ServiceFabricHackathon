@@ -7,17 +7,10 @@ using Microsoft.ServiceFabric.Actors;
 using Microsoft.ServiceFabric.Actors.Runtime;
 using Microsoft.ServiceFabric.Actors.Client;
 using ProcessManagerActor.Interfaces;
+using Common.Events;
 
 namespace ProcessManagerActor
 {
-    /// <remarks>
-    /// This class represents an actor.
-    /// Every ActorID maps to an instance of this class.
-    /// The StatePersistence attribute determines persistence and replication of actor state:
-    ///  - Persisted: State is written to disk and replicated.
-    ///  - Volatile: State is kept in memory only and replicated.
-    ///  - None: State is kept in memory only and not replicated.
-    /// </remarks>
     [StatePersistence(StatePersistence.Persisted)]
     internal class ProcessManagerActor : Actor, IProcessManagerActor
     {
@@ -47,11 +40,10 @@ namespace ProcessManagerActor
             return this.StateManager.TryAddStateAsync("count", 0);
         }
 
-        public Task ProcessDeviceReadEventAsync(object deviceReadEVent)
+        public Task ProcessDeviceReadEventAsync(DeviceRead deviceReadEVent)
         {
-            // TODO: Use reminder to add event
-            throw new NotImplementedException();
+            // TODO: implement
+            return Task.FromResult(true);
         }
-
     }
 }
