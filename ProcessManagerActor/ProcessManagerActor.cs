@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.ServiceFabric.Actors;
+﻿using Microsoft.ServiceFabric.Actors;
 using Microsoft.ServiceFabric.Actors.Runtime;
-using Microsoft.ServiceFabric.Actors.Client;
 using ProcessManagerActor.Interfaces;
+using System;
+using System.Threading.Tasks;
 
 namespace ProcessManagerActor
 {
@@ -19,8 +15,10 @@ namespace ProcessManagerActor
     ///  - None: State is kept in memory only and not replicated.
     /// </remarks>
     [StatePersistence(StatePersistence.Persisted)]
-    internal class ProcessManagerActor : Actor, IProcessManagerActor
+    internal class ProcessManagerActor : Actor, IProcessManagerActor, IRemindable
     {
+        private const string StartProcessingReminder = "StartProcessingReminder";
+
         /// <summary>
         /// Initializes a new instance of ProcessManagerActor
         /// </summary>
@@ -49,9 +47,18 @@ namespace ProcessManagerActor
 
         public Task ProcessDeviceReadEventAsync(object deviceReadEVent)
         {
-            // TODO: Use reminder to add event
-            throw new NotImplementedException();
+            // TODO: Add DeviceReadEvent to ReliableQueue
+            return RegisterReminderAsync(StartProcessingReminder, null, TimeSpan.FromSeconds(-1), TimeSpan.FromSeconds(-1));
         }
 
+        public Task ReceiveReminderAsync(string reminderName, byte[] context, TimeSpan dueTime, TimeSpan period)
+        {
+            if (reminderName == StartProcessingReminder)
+            {
+                //TODO: Get DeviceReadEvent from ReliableQueue and start processing the DeviceReadEvent
+            }
+
+            throw new NotImplementedException();
+        }
     }
 }
