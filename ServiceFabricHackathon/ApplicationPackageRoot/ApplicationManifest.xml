@@ -10,6 +10,9 @@
        should match the Name and Version attributes of the ServiceManifest element defined in the 
        ServiceManifest.xml file. -->
   <ServiceManifestImport>
+    <ServiceManifestRef ServiceManifestName="DiffCalculatorActorPkg" ServiceManifestVersion="1.0.0" />
+  </ServiceManifestImport>
+  <ServiceManifestImport>
     <ServiceManifestRef ServiceManifestName="ProcessManagerActorPkg" ServiceManifestVersion="1.0.0" />
   </ServiceManifestImport>
   <ServiceManifestImport>
