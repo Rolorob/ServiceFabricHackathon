@@ -35,8 +35,6 @@
         var dataHasChanged = true;
 
         function addData(date, value) {
-            var chart = new google.visualization.AreaChart($('#usagechart_div').get(0));
-
             var newData = []
 
             data.addRow([
@@ -75,7 +73,7 @@
                 seriesType: 'area',
             };
 
-            chart = new google.visualization.ComboChart(document.getElementById('usagechart_div'));
+            chart = new google.visualization.AreaChart(document.getElementById('usagechart_div'));
             chart.draw(data, options);
         }
     </script>
@@ -88,18 +86,20 @@
         };
         $.connection.hub.start().done(function () {
             console.log("connected");
-            while (true) {
-                setTimeout(() => {
-                    if (dataHasChanged) {
-                        chart.draw(data, {
-                            title: 'Verbruik meter X'
-                        });
-                        dataHasChanged = false;
-                    }
-                }, 100);
-            }
+            checkDraw();
         });
-        ;
+
+    }
+
+    function checkDraw() {
+        if (dataHasChanged) {
+            var drawChart = new google.visualization.AreaChart($('#usagechart_div').get(0));
+            drawChart.draw(data, {
+                title: 'Verbruik meter X'
+            });
+            dataHasChanged = false;
+        }
+        setTimeout(checkDraw, 50);
     }
     </script>
 
