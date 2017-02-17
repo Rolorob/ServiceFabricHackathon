@@ -4,6 +4,8 @@ using ProcessManagerActor.Interfaces;
 using Common.Events;
 using System;
 using System.Threading.Tasks;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace ProcessManagerActor
 {
@@ -11,6 +13,7 @@ namespace ProcessManagerActor
     internal class ProcessManagerActor : Actor, IProcessManagerActor, IRemindable
     {
         private const string StartProcessingReminder = "StartProcessingReminder";
+        private const string DEVICE_READS_QUEUE = "DeviceReadsQueue";
 
         /// <summary>
         /// Initializes a new instance of ProcessManagerActor
@@ -35,20 +38,23 @@ namespace ProcessManagerActor
             // Any serializable object can be saved in the StateManager.
             // For more information, see https://aka.ms/servicefabricactorsstateserialization
 
-            return this.StateManager.TryAddStateAsync("count", 0);
+            return this.StateManager.TryAddStateAsync(DEVICE_READS_QUEUE, new List<DeviceRead>());
         }
 
-        public Task ProcessDeviceReadEventAsync(DeviceRead deviceReadEVent)
+        public async Task ProcessDeviceReadEventAsync(DeviceRead deviceReadEvent)
         {
-            // TODO: Add DeviceReadEvent to ReliableQueue
-            return RegisterReminderAsync(StartProcessingReminder, null, TimeSpan.FromSeconds(-1), TimeSpan.FromSeconds(-1));
+            var deviceReadQueue = await this.StateManager.GetStateAsync<List<DeviceRead>>(DEVICE_READS_QUEUE);
+            deviceReadQueue.Add(deviceReadEvent);
+            await this.StateManager.SetStateAsync(DEVICE_READS_QUEUE, deviceReadQueue);
+
+            await RegisterReminderAsync(StartProcessingReminder, null, TimeSpan.FromSeconds(-1), TimeSpan.FromSeconds(-1));
         }
 
         public Task ReceiveReminderAsync(string reminderName, byte[] context, TimeSpan dueTime, TimeSpan period)
         {
             if (reminderName == StartProcessingReminder)
             {
-                //TODO: Get DeviceReadEvent from ReliableQueue and start processing the DeviceReadEvent
+                //TODO: Get DeviceReadEvent from Queue and start processing the DeviceReadEvent
             }
 
             throw new NotImplementedException();
