@@ -31,6 +31,7 @@
   <ItemGroup>
     <ProjectReference Include="..\EventRouter\EventRouter.csproj" />
     <ProjectReference Include="..\ProcessManagerActor\ProcessManagerActor.csproj" />
+    <ProjectReference Include="..\UISocketStatelessService\UISocketStatelessService.csproj" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />
   <PropertyGroup>

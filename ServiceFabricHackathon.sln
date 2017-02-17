@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcessManagerActor", "Proc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcessManagerActor.Interfaces", "ProcessManagerActor.Interfaces\ProcessManagerActor.Interfaces.csproj", "{34462524-6AD0-4DFD-B0CB-CB1C06B10045}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UISocketStatelessService", "UISocketStatelessService\UISocketStatelessService.csproj", "{A0326166-0EE8-4B60-9100-08C1B4FEAD4C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,12 @@ Global
 		{34462524-6AD0-4DFD-B0CB-CB1C06B10045}.Release|Any CPU.ActiveCfg = Release|x64
 		{34462524-6AD0-4DFD-B0CB-CB1C06B10045}.Release|x64.ActiveCfg = Release|x64
 		{34462524-6AD0-4DFD-B0CB-CB1C06B10045}.Release|x64.Build.0 = Release|x64
+		{A0326166-0EE8-4B60-9100-08C1B4FEAD4C}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{A0326166-0EE8-4B60-9100-08C1B4FEAD4C}.Debug|x64.ActiveCfg = Debug|x64
+		{A0326166-0EE8-4B60-9100-08C1B4FEAD4C}.Debug|x64.Build.0 = Debug|x64
+		{A0326166-0EE8-4B60-9100-08C1B4FEAD4C}.Release|Any CPU.ActiveCfg = Release|x64
+		{A0326166-0EE8-4B60-9100-08C1B4FEAD4C}.Release|x64.ActiveCfg = Release|x64
+		{A0326166-0EE8-4B60-9100-08C1B4FEAD4C}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
