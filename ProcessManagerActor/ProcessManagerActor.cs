@@ -10,11 +10,12 @@ using System.Collections.Generic;
 using Microsoft.ServiceFabric.Actors.Client;
 using DiffCalculatorActor.Interfaces;
 using Common.Model;
+using ProcessManagerActor.Interfaces.Events;
 
 namespace ProcessManagerActor
 {
     [StatePersistence(StatePersistence.Persisted)]
-    internal class ProcessManagerActor : Actor, IProcessManagerActor, IRemindable
+    internal class ProcessManagerActor : Actor, IProcessManagerActor, IRemindable, IActorEventPublisher<IDeviceReadingProcessedEvent>
     {
         private const string StartProcessingReminder = "StartProcessingReminder";
         private const string DEVICE_READS_QUEUE = "DeviceReadsQueue";
@@ -63,26 +64,24 @@ namespace ProcessManagerActor
                 var deviceReadEvent = deviceReadQueue.First();
                 var actorId = this.GetActorId();
 
-                //TODO: Start processing the DeviceReadEvent
-                
                 // First we diff
                 var diffActor = ActorProxy.Create<IDiffCalculatorActor>(actorId, "ServiceFabricHackathon", "DiffCalculatorActorService");
                 var diffResult = await diffActor.CalculateDiffAsync(deviceReadEvent.Reading);
 
-                // Then we split
+                // TODO: Then we split
 
-
-                // then we publish an event
+                // Then we publish an event
                 var result = new ReadingResult()
                 {
                     ChannelId = deviceReadEvent.Reading.ChannelId.ToString(),
                     DeviceId = deviceReadEvent.DeviceId,
-                    Timestamp = DateTime.UtcNow,
-                    Value = 1m
+                    Timestamp = deviceReadEvent.Reading.Timestamp,
+                    Value = diffResult.DiffValue,
                 };
 
-
-
+                var evt = GetEvent<IDeviceReadingProcessedEvent>();
+                evt.DeviceReadingProcessed(result);
+                
                 // Remove processed DeviceReadEvent from queue
                 deviceReadQueue.RemoveAt(0);
                 await this.StateManager.SetStateAsync(DEVICE_READS_QUEUE, deviceReadQueue);
