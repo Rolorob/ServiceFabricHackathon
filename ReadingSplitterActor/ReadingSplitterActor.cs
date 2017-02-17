@@ -4,6 +4,7 @@ using Microsoft.ServiceFabric.Actors.Runtime;
 using ReadingSplitterActor.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ReadingSplitterActor
@@ -51,7 +52,7 @@ namespace ReadingSplitterActor
             var endDateWithoutSeconds = reading.EndTime.Truncate(TimeSpan.TicksPerSecond);
 
             //if (startDateWithoutSeconds.Equals(endDateWithoutSeconds))
-            throw new NotImplementedException();
+            return Task.FromResult(Enumerable.Empty<SplitReading>());
         }
     }
 }
