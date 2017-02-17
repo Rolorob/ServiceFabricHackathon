@@ -3,6 +3,7 @@ using Microsoft.ServiceFabric.Actors.Runtime;
 using ProcessManagerActor.Interfaces;
 using Common.Events;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
@@ -50,14 +51,20 @@ namespace ProcessManagerActor
             await RegisterReminderAsync(StartProcessingReminder, null, TimeSpan.FromSeconds(-1), TimeSpan.FromSeconds(-1));
         }
 
-        public Task ReceiveReminderAsync(string reminderName, byte[] context, TimeSpan dueTime, TimeSpan period)
+        public async Task ReceiveReminderAsync(string reminderName, byte[] context, TimeSpan dueTime, TimeSpan period)
         {
             if (reminderName == StartProcessingReminder)
             {
-                //TODO: Get DeviceReadEvent from Queue and start processing the DeviceReadEvent
-            }
+                // Get next DeviceReadEvent 
+                var deviceReadQueue = await this.StateManager.GetStateAsync<List<DeviceRead>>(DEVICE_READS_QUEUE);
+                var deviceReadEvent = deviceReadQueue.First();
 
-            throw new NotImplementedException();
+                //TODO: Start processing the DeviceReadEvent
+
+                // Remove processed DeviceReadEvent from queue
+                deviceReadQueue.RemoveAt(0);
+                await this.StateManager.SetStateAsync(DEVICE_READS_QUEUE, deviceReadQueue);
+            }
         }
     }
 }
