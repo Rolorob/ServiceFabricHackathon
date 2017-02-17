@@ -4,11 +4,12 @@ using System.Runtime.Serialization;
 
 namespace Common.Model
 {
+    [DataContract]
     public class SplitReading
     {
         public SplitReading(DateTime minute, decimal reading)
         {
-            Minute = minute;
+            Minute = minute.AddTicks(-(minute.Ticks % TimeSpan.TicksPerMinute));
             Reading = reading;
         }
 
