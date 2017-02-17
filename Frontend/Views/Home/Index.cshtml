@@ -1,0 +1,54 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="well">
+            <h1>Standen</h1>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div id="usagechart_div">
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+        google.charts.load('current', { 'packages': ['corechart'] });
+        google.charts.setOnLoadCallback(drawChart);
+        var data = null;
+
+        function addData(dataToAdd) {
+            var chart = new google.visualization.AreaChart($('#usagechart_div').get(0));
+
+            data.addRow([
+              (new Date(dataToAdd.timestamp)).toString(),
+              parseFloat(dataToAdd.meetwaarde)
+            ])
+
+            chart.draw(data, {
+                title: 'Verbruik meter X'
+            });
+        }
+
+        function drawChart() {
+            data = google.visualization.arrayToDataTable([
+              ['Minute', 'kWh'],
+              [Date(2017, 2, 17, 10, 0, 1), 1000],
+              [Date(2017, 2, 17, 10, 0, 2), 1170],
+              [Date(2017, 2, 17, 10, 0, 3), 1200],
+              [Date(2017, 2, 17, 10, 0, 4), 1250],
+              [Date(2017, 2, 17, 10, 0, 5), 1275],
+              [Date(2017, 2, 17, 10, 0, 6), 1310],
+              [Date(2017, 2, 17, 10, 0, 7), 1380],
+            ]);
+            var options = {
+                title: 'Verbruik meter X',
+                hAxis: { title: 'Time', titleTextStyle: { color: '#333' } },
+                vAxis: { minValue: 0 }
+            };
+
+            var chart = new google.visualization.AreaChart(document.getElementById('usagechart_div'));
+            chart.draw(data, options);
+        }
+</script>
