@@ -17,7 +17,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiffCalculatorActor", "Diff
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiffCalculatorActor.Interfaces", "DiffCalculatorActor.Interfaces\DiffCalculatorActor.Interfaces.csproj", "{593E1C37-95A8-417B-8CA1-00CC0867FFAA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frontend", "Frontend\Frontend.csproj", "{A262DA80-9962-4FEC-A968-0A28BE9551E3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReadingSplitterActor", "ReadingSplitterActor\ReadingSplitterActor.csproj", "{2417DDFF-6608-4C76-A056-0CF25B662619}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReadingSplitterActor.Interfaces", "ReadingSplitterActor.Interfaces\ReadingSplitterActor.Interfaces.csproj", "{86E63932-7908-46AB-A320-89F44C6F234E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -81,6 +83,18 @@ Global
 		{593E1C37-95A8-417B-8CA1-00CC0867FFAA}.Release|Any CPU.ActiveCfg = Release|x64
 		{593E1C37-95A8-417B-8CA1-00CC0867FFAA}.Release|x64.ActiveCfg = Release|x64
 		{593E1C37-95A8-417B-8CA1-00CC0867FFAA}.Release|x64.Build.0 = Release|x64
+		{2417DDFF-6608-4C76-A056-0CF25B662619}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{2417DDFF-6608-4C76-A056-0CF25B662619}.Debug|x64.ActiveCfg = Debug|x64
+		{2417DDFF-6608-4C76-A056-0CF25B662619}.Debug|x64.Build.0 = Debug|x64
+		{2417DDFF-6608-4C76-A056-0CF25B662619}.Release|Any CPU.ActiveCfg = Release|x64
+		{2417DDFF-6608-4C76-A056-0CF25B662619}.Release|x64.ActiveCfg = Release|x64
+		{2417DDFF-6608-4C76-A056-0CF25B662619}.Release|x64.Build.0 = Release|x64
+		{86E63932-7908-46AB-A320-89F44C6F234E}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{86E63932-7908-46AB-A320-89F44C6F234E}.Debug|x64.ActiveCfg = Debug|x64
+		{86E63932-7908-46AB-A320-89F44C6F234E}.Debug|x64.Build.0 = Debug|x64
+		{86E63932-7908-46AB-A320-89F44C6F234E}.Release|Any CPU.ActiveCfg = Release|x64
+		{86E63932-7908-46AB-A320-89F44C6F234E}.Release|x64.ActiveCfg = Release|x64
+		{86E63932-7908-46AB-A320-89F44C6F234E}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
