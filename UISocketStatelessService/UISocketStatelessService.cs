@@ -6,6 +6,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
+using Microsoft.ServiceFabric.Actors.Client;
+using ProcessManagerActor.Interfaces;
+using Microsoft.ServiceFabric.Actors;
+using ProcessManagerActor.Interfaces.Events;
 
 namespace UISocketStatelessService
 {

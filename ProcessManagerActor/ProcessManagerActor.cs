@@ -15,7 +15,7 @@ using ProcessManagerActor.Interfaces.Events;
 namespace ProcessManagerActor
 {
     [StatePersistence(StatePersistence.Persisted)]
-    internal class ProcessManagerActor : Actor, IProcessManagerActor, IRemindable, IActorEventPublisher<IDeviceReadingProcessedEvent>
+    internal class ProcessManagerActor : Actor, IProcessManagerActor, IRemindable
     {
         private const string StartProcessingReminder = "StartProcessingReminder";
         private const string DEVICE_READS_QUEUE = "DeviceReadsQueue";
