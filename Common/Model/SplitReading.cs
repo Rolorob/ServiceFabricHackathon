@@ -9,6 +9,7 @@ namespace Common.Model
     {
         public SplitReading(DateTime minute, decimal reading)
         {
+            // Dit rond de DateTime af naar hele minuten
             Minute = minute.AddTicks(-(minute.Ticks % TimeSpan.TicksPerMinute));
             Reading = reading;
         }
