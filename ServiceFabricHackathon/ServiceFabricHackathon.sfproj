@@ -34,6 +34,7 @@
     <ProjectReference Include="..\ProcessManagerActor\ProcessManagerActor.csproj" />
     <ProjectReference Include="..\UISocketStatelessService\UISocketStatelessService.csproj" />
     <ProjectReference Include="..\ReadingSplitterActor\ReadingSplitterActor.csproj" />
+    <ProjectReference Include="..\WebApi1\WebApi1.csproj" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />
   <PropertyGroup>

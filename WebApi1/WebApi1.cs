@@ -4,32 +4,36 @@ using System.Fabric;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNet.SignalR;
+using Microsoft.ServiceFabric.Actors;
+using Microsoft.ServiceFabric.Actors.Client;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
-using Microsoft.ServiceFabric.Actors.Client;
 using ProcessManagerActor.Interfaces;
-using Microsoft.ServiceFabric.Actors;
 using ProcessManagerActor.Interfaces.Events;
-using Microsoft.AspNet.SignalR;
+using UISocketStatelessService;
 
-namespace UISocketStatelessService
+namespace WebApi1
 {
     /// <summary>
-    /// An instance of this class is created for each service instance by the Service Fabric runtime.
+    /// The FabricRuntime creates an instance of this class for each service type instance. 
     /// </summary>
-    internal sealed class UISocketStatelessService : StatelessService
+    internal sealed class WebApi1 : StatelessService
     {
-        public UISocketStatelessService(StatelessServiceContext context)
+        public WebApi1(StatelessServiceContext context)
             : base(context)
         { }
 
         /// <summary>
-        /// Optional override to create listeners (e.g., TCP, HTTP) for this service replica to handle client or user requests.
+        /// Optional override to create listeners (like tcp, http) for this service instance.
         /// </summary>
-        /// <returns>A collection of listeners.</returns>
+        /// <returns>The collection of listeners.</returns>
         protected override IEnumerable<ServiceInstanceListener> CreateServiceInstanceListeners()
         {
-            return new ServiceInstanceListener[0];
+            return new ServiceInstanceListener[]
+            {
+                new ServiceInstanceListener(serviceContext => new OwinCommunicationListener(Startup.ConfigureApp, serviceContext, ServiceEventSource.Current, "ServiceEndpoint"))
+            };
         }
 
         /// <summary>

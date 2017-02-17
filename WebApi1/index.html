@@ -1,0 +1,117 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page - Realtime</title>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <link href="/Content/bootstrap.css" rel="stylesheet" />
+    <link href="/Content/site.css" rel="stylesheet" />
+
+    <script src="/Scripts/modernizr-2.6.2.js"></script>
+
+</head>
+<body>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <button onclick="requestDevice()" type="button">Start!</button>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div id="usagechart_div">
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        var numberOfMinutestoView = 60;
+        google.charts.load('current', { 'packages': ['corechart'] });
+        google.charts.setOnLoadCallback(drawChart);
+        var data = null;
+        var chart = null;
+        var dataHasChanged = true;
+
+        function addData(date, value) {
+            var chart = new google.visualization.AreaChart($('#usagechart_div').get(0));
+
+            var newData = []
+
+            data.addRow([
+              date,
+              parseFloat(value)
+            ]);
+
+            /*var startIndex = data.getNumberOfRows() - numberOfMinutestoView;
+            startIndex = (startIndex < 0) ? 0 : startIndex;
+            var dataArray = data.qg;
+            for (var i = 0; i < numberOfMinutestoView; i++) {
+                var row = dataArray[startIndex + i];
+                newData[i] = row["c"];
+            }
+
+            data = new google.visualization.DataTable();
+            data.addColumn('string', 'time');
+            data.addColumn('number', 'value');
+
+            var newChartData = [
+              ['Minute', 'kWh']
+            ].concat(newData);
+            data = google.visualization.arrayToDataTable(newChartData);*/
+            dataHasChanged = true;
+        }
+
+        function drawChart() {
+            data = google.visualization.arrayToDataTable([
+              ['Minute', 'kWh'],
+              ["Tijd",0]
+            ]);
+            var options = {
+                title: 'Verbruik meter X',
+                hAxis: { title: 'Time', titleTextStyle: { color: '#333' } },
+                vAxis: { minValue: 0 },
+                seriesType: 'area',
+            };
+
+            chart = new google.visualization.ComboChart(document.getElementById('usagechart_div'));
+            chart.draw(data, options);
+        }
+    </script>
+    <script>
+    function requestDevice(){
+        var hub = $.connection.signalRHub;
+        hub.client.sendData = function (message) {
+            console.log(message);
+            addData(message.Timestamp, message.Value);
+        };
+        $.connection.hub.start().done(function () {
+            console.log("connected");
+            while (true) {
+                setTimeout(() => {
+                    if (dataHasChanged) {
+                        chart.draw(data, {
+                            title: 'Verbruik meter X'
+                        });
+                        dataHasChanged = false;
+                    }
+                }, 100);
+            }
+        });
+        ;
+    }
+    </script>
+
+
+    <script src="/Scripts/jquery-1.10.2.js"></script>
+
+    <script src="/Scripts/bootstrap.js"></script>
+    <script src="/Scripts/respond.js"></script>
+
+    <script src="/Scripts/jquery.signalR-2.2.1.js"></script>
+    <script src="/Scripts/server.js"></script>
+
+
+</body>
+</html>

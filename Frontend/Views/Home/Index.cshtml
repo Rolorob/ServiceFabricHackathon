@@ -141,6 +141,8 @@
 <script>
     function requestDevice(){
         var hub = $.connection.signalRHub;
-        hub.server.requestSubscription($('#device_field').val(), $('#channel_field').val());
+        hub.client.sendData = function (message) {
+            console.log(message);
+        };
     }
 </script>
