@@ -96,6 +96,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{e9b1f059-287a-491e-b518-cc553168c783}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ProcessManagerActor.Interfaces\ProcessManagerActor.Interfaces.csproj">
       <Project>{34462524-6AD0-4DFD-B0CB-CB1C06B10045}</Project>
       <Name>ProcessManagerActor.Interfaces</Name>
