@@ -3,5 +3,6 @@
   <Parameters>
     <Parameter Name="EventRouter_InstanceCount" Value="1" />
     <Parameter Name="ProcessManagerActorService_PartitionCount" Value="1" />
+    <Parameter Name="DiffCalculatorActorService_PartitionCount" Value="1" />
   </Parameters>
 </Application>
