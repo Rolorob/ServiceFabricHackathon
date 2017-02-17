@@ -54,6 +54,7 @@
     <Compile Include="Model\SplitReading.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TypeExtensions.cs" />
+    <Compile Include="Utils\PartitionKeyResolver.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
