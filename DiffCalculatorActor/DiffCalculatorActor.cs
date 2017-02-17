@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using Common.Model;
+using DiffCalculatorActor.Interfaces;
 using Microsoft.ServiceFabric.Actors;
 using Microsoft.ServiceFabric.Actors.Runtime;
-using Microsoft.ServiceFabric.Actors.Client;
-using DiffCalculatorActor.Interfaces;
-using Common.Model;
+using System.Threading.Tasks;
 
 namespace DiffCalculatorActor
 {
@@ -22,7 +17,6 @@ namespace DiffCalculatorActor
     [StatePersistence(StatePersistence.Persisted)]
     internal class DiffCalculatorActor : Actor, IDiffCalculatorActor
     {
-        private DeviceReading _previousReading;
         /// <summary>
         /// Initializes a new instance of DiffCalculatorActor
         /// </summary>
@@ -39,7 +33,7 @@ namespace DiffCalculatorActor
         /// </summary>
         protected override Task OnActivateAsync()
         {
-            ActorEventSource.Current.ActorMessage(this, "Actor activated.");
+            ActorEventSource.Current.ActorMessage(this, "DiffCalculatorActor activated.");
 
             // The StateManager is this actor's private state store.
             // Data stored in the StateManager will be replicated for high-availability for actors that use volatile or persisted state storage.
@@ -49,18 +43,29 @@ namespace DiffCalculatorActor
             return this.StateManager.TryAddStateAsync("count", 0);
         }
 
-        public Task<ReadingDiff> CalculateDiffAsync(DeviceReading reading)
+        public async Task<ReadingDiff> CalculateDiffAsync(DeviceReading reading)
         {
-            var diff = 0m;
-            if (_previousReading != null)
+            var previousReading = await GetPreviousReadingAsync();
+            await PersistPreviousReadingAsync(reading);
+            if (previousReading == null)
             {
-                diff = _previousReading.Value - reading.Value;
+                return null;
             }
 
-            var calculatedStuff = new ReadingDiff(_previousReading.Timestamp, reading.Timestamp, diff);
-            _previousReading = reading;
+            var diff = reading.Value - previousReading.Value;
+            return new ReadingDiff(previousReading.Timestamp, reading.Timestamp, diff);
+        }
 
-            return Task.FromResult(calculatedStuff);
+        private Task PersistPreviousReadingAsync(DeviceReading reading)
+        {
+            this.StateManager.AddOrUpdateStateAsync<DeviceReading>("PreviousReading", reading, (key, value) => reading);
+            return this.StateManager.SaveStateAsync();
+        }
+
+        private async Task<DeviceReading> GetPreviousReadingAsync()
+        {
+            var result = await this.StateManager.TryGetStateAsync<DeviceReading>("PreviousReading");
+            return result.HasValue ? result.Value : null;
         }
     }
 }

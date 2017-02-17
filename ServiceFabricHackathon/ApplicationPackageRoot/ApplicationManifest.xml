@@ -5,6 +5,9 @@
     <Parameter Name="ProcessManagerActorService_PartitionCount" DefaultValue="10" />
     <Parameter Name="ProcessManagerActorService_MinReplicaSetSize" DefaultValue="3" />
     <Parameter Name="ProcessManagerActorService_TargetReplicaSetSize" DefaultValue="3" />
+    <Parameter Name="DiffCalculatorActorService_PartitionCount" DefaultValue="10" />
+    <Parameter Name="DiffCalculatorActorService_MinReplicaSetSize" DefaultValue="3" />
+    <Parameter Name="DiffCalculatorActorService_TargetReplicaSetSize" DefaultValue="3" />
   </Parameters>
   <!-- Import the ServiceManifest from the ServicePackage. The ServiceManifestName and ServiceManifestVersion 
        should match the Name and Version attributes of the ServiceManifest element defined in the 
@@ -33,6 +36,11 @@
     <Service Name="ProcessManagerActorService" GeneratedIdRef="76831b98-07b7-40ea-999b-b1ca317d84c9|Persisted">
       <StatefulService ServiceTypeName="ProcessManagerActorServiceType" TargetReplicaSetSize="[ProcessManagerActorService_TargetReplicaSetSize]" MinReplicaSetSize="[ProcessManagerActorService_MinReplicaSetSize]">
         <UniformInt64Partition PartitionCount="[ProcessManagerActorService_PartitionCount]" LowKey="-9223372036854775808" HighKey="9223372036854775807" />
+      </StatefulService>
+    </Service>
+    <Service Name="DiffCalculatorActorService" GeneratedIdRef="55810e96-f28e-4eac-8ae4-e010b91e9a99|Persisted">
+      <StatefulService ServiceTypeName="DiffCalculatorActorServiceType" TargetReplicaSetSize="[DiffCalculatorActorService_TargetReplicaSetSize]" MinReplicaSetSize="[DiffCalculatorActorService_MinReplicaSetSize]">
+        <UniformInt64Partition PartitionCount="[DiffCalculatorActorService_PartitionCount]" LowKey="-9223372036854775808" HighKey="9223372036854775807" />
       </StatefulService>
     </Service>
   </DefaultServices>
