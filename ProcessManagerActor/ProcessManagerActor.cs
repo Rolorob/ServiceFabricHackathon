@@ -48,12 +48,12 @@ namespace ProcessManagerActor
             deviceReadQueue.Add(deviceReadEvent);
             await this.StateManager.SetStateAsync(DEVICE_READS_QUEUE, deviceReadQueue);
 
-            await RegisterReminderAsync(StartProcessingReminder, null, TimeSpan.FromSeconds(-1), TimeSpan.FromSeconds(-1));
+            await RegisterReminderAsync(StartProcessingReminder, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(-1));
         }
 
         public async Task ReceiveReminderAsync(string reminderName, byte[] context, TimeSpan dueTime, TimeSpan period)
         {
-            if (reminderName == StartProcessingReminder)
+            if (reminderName.StartsWith(StartProcessingReminder))
             {
                 // Get next DeviceReadEvent 
                 var deviceReadQueue = await this.StateManager.GetStateAsync<List<DeviceRead>>(DEVICE_READS_QUEUE);
