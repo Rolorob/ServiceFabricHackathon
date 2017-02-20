@@ -42,7 +42,7 @@ namespace UISocketStatelessService
             //       or remove this RunAsync override if it's not needed in your service.
 
             var ctx = GlobalHost.ConnectionManager.GetHubContext<SignalRHub>();
-            RequestSubscription("5f3ea292-9e71-4999-aab0-a0f6ee337975", "profile_heat_import_energy_heating");
+            RequestSubscription("099aee3f-1cff-4c41-9391-aaf45ea55ebe","profile_heat_import_energy_heating");
             await Task.Delay(-1, cancellationToken);
         }
 
